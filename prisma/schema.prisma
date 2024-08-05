@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:Fabricio123@localhost:3306/AppDb"
+}
+
+model messages {
+  id        Int     @id @default(autoincrement())
+  message   String? @db.VarChar(255)
+  id_person Int
+  person    person  @relation(fields: [id_person], references: [id], map: "fk_id_person")
+
+  @@index([id_person], map: "fk_id_person")
+}
+
+model person {
+  id       Int        @id @default(autoincrement())
+  name     String?    @db.VarChar(80)
+  birthday DateTime?  @db.Date
+  email    String?    @db.VarChar(120)
+  messages messages[]
+}
