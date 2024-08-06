@@ -4,6 +4,8 @@ const express = require("express");
 const router = express();
 
 
+router.use(express.json());
+
 router.get('/', (req, res) => {
     res.send({message: 'hello world'});
     console.log("connected");
@@ -17,6 +19,7 @@ router.get("/myAccount/:id", async (req, res) => {
     res.json(userRequired);
 })
 router.post("/register", async (req, res) => {
+    console.log(req.body)
     const {name, birthday, email} = req.body;
     const creating = await prisma.person.create({
         data:
@@ -29,8 +32,9 @@ router.post("/register", async (req, res) => {
     res.json(creating);
 });
 
-router.post('MyAccount/delete', async (req, res) => {
-    const {userId} = req.params;
+router.delete("/myAccount/delete", async (req, res) => {
+    const userId = req.body.id;
+    console.log(userId);
     const deleting = await prisma.person.delete({
         where: {
             id: Number(userId)
